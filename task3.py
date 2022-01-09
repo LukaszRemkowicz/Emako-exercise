@@ -91,14 +91,25 @@ class Connector:
         result = self.request("GET", "products")
         products = result['result']
 
-        return self.paginate_view(result['page_count'], 40, products, created_at={"start": newer_than.isoformat()})
+        return self.paginate_view(
+            result['page_count'],
+            40,
+            products,
+            created_at={"start": newer_than.isoformat()}
+        )
 
     def add_products(self, products: List[dict]) -> None:
 
-        products_pagination = [products[num:num + 20] for num in range(0, len(products), 20)]
+        products_pagination = [
+            products[num:num + 20] for num in range(0, len(products), 20)
+        ]
         for paginate in products_pagination:
             try:
-                res = self.request('POST', 'products', {"products": paginate})["result"]
+                res = self.request(
+                    'POST',
+                    'products',
+                    {"products": paginate}
+                )["result"]
                 if res:
                     print('Update successfull')
             except error:
@@ -108,9 +119,13 @@ class Connector:
 
         current_data = self.get_products(list(stocks))
         for product_entry in current_data:
-            product_entry["details"]["supply"] = stocks[product_entry["id"]]['details']['supply']
+            product_entry["details"]["supply"] = stocks[
+                product_entry["id"]
+            ]['details']['supply']
 
-        products_pagination = [current_data[num:num + 20] for num in range(0, len(current_data), 20)]
+        products_pagination = [
+            current_data[num:num + 20] for num in range(0, len(current_data), 20)
+        ]
         for paginate in products_pagination:
             try:
                 res = self.request('PUT', 'products', {"products": paginate})

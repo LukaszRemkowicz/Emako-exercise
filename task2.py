@@ -11,7 +11,8 @@ for target in [-2, -3]:
     try:
         flag = True
         response = request(
-            "GET", f"https://recruitment.developers.emako.pl/products/example?id={target}"
+            "GET", f"https://recruitment.developers.emako.pl/"
+                   f"products/example?id={target}"
         )
         response_content = response.content
 
@@ -33,7 +34,7 @@ for target in [-2, -3]:
                         productSupply = stock_data["quantity"]
 
                         cursor = sql.cursor()
-                        sql_query = """INSERT INTO product_stocks (time, product_id, variant_id, stock_id, supply)
+                        sql_query = """INSERT INTO product_stocks(time, product_id, variant_id, stock_id, supply)
                                         VALUES (?, ?, ?, ?, ?)"""
 
                         data = (
@@ -54,7 +55,8 @@ for target in [-2, -3]:
 
             for prodd in products:
                 res = request(
-                    "GET", f"https://recruitment.developers.emako.pl/products/example?id={prodd}"
+                    "GET", f"https://recruitment.developers.emako.pl/"
+                           f"products/example?id={prodd}"
                 )
                 respContent = res.content
                 with open("tmp.txt", "wb") as file:
@@ -63,8 +65,10 @@ for target in [-2, -3]:
                 with open("tmp.txt", "r") as file:
                     product = json.load(file)
 
-                supply = sum([stock['quantity'] for supply in product["details"]["supply"]
-                              for stock in supply["stock_data"] if stock["stock_id"] == 1])
+                supply = sum([
+                    stock['quantity'] for supply in product["details"]["supply"]
+                    for stock in supply["stock_data"] if stock["stock_id"] == 1
+                ])
 
                 all_supply.append(supply)
 
