@@ -6,9 +6,9 @@
 .*swp
 *.csv
 *.txt
-*.json
 credentials.json
 database.sqlite
 ids.csv
 tmp.txt
 example.py
+__pycache__
